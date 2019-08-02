@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Sign Certificate</h1>
+    <form action="" method="post" novalidate>
+       {{ form.hidden_tag() }}
+	 <p>
+            {{ form.cakey.label }}<br>
+            {{ form.cakey(size=32) }}<br>
+            {% for error in form.cakey.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.cacert.label }}<br>
+            {{ form.cacert(size=32) }}<br>
+            {% for error in form.cacert.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.days.label }}<br>
+            {{ form.days(size=32) }}<br>
+            {% for error in form.days.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.csr.label }}<br>
+            {{ form.csr(cols=100, rows=20) }}<br>
+            {% for error in form.csr.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+    <br>
+{% endblock %}
+

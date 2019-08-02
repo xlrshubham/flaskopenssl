@@ -1,0 +1,28 @@
+<html>
+	    <head>
+		      {% if title %}
+		        <title>{{ title }} - OpenSSL Tool</title>
+		      {% else %}
+		         <title>Open SSL Tool</title>
+		      {% endif %}
+		</head>
+		<body>
+		      <div>
+			      Tool Options:
+			      <a href="{{ url_for('index') }}">Home</a>
+			      <a href="{{ url_for('sign') }}">Sign Cert</a>
+		      </div>
+		      
+		      <hr>
+		      {% with messages = get_flashed_messages() %}
+		      {% if messages %}
+		      <ul>
+			      {% for message in messages %}
+			      <li>{{ message }}</li>
+			      {% endfor %}
+		      </ul>
+		      {% endif %}
+		      {% endwith %}
+		      {% block content %}{% endblock %}
+		</body>
+</html>
