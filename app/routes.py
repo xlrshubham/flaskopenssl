@@ -43,7 +43,12 @@ def sign():
 			cert.set_issuer(ca_crt.get_subject())
 			cert.set_subject(csr.get_subject())
 			cert.set_pubkey(csr.get_pubkey())
-			cert.sign(cakey, hashes.SHA256())
+			cert.sign(cakey, 'sha1')
+			e=crypto.dump_certificate(crypto.FILETYPE_PEM, cert)
+			f=open(os.path.join(app.config['CERTPATH'],'client'+starttime+'.crt'),'a')
+			f.write(e)
+			f.close()
+#			cert.sign(cakey, hashes.SHA256())
 #			with open("output.crt","wb") as f:
 #				f.write(cert.public_bytes(serialization.Encoding.PEM))
 		except Exception as e:
