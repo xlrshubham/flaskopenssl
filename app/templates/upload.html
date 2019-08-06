@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Upload Certificate</h1>
+    <form action="" method="post" enctype="multipart/form-data" novalidate>
+       {{ form.hidden_tag() }}
+	 <p>
+            {{ form.cakey.label }}<br>
+            {{ form.cakey() }}<br>
+            {% for error in form.cakey.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.cacert.label }}<br>
+            {{ form.cacert() }}<br>
+            {% for error in form.cacert.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+    <br>
+{% endblock %}
+
