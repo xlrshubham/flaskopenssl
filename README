@@ -123,3 +123,5 @@ DNS.4       = ftp.example.com
 
 # IPv6 localhost
 # DNS.8     = ::1
+
+###bye
