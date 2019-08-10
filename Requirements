@@ -1,0 +1,6 @@
+pip install python-flask
+pip install flask
+pip install python-dotenv
+pip install flask_wtf
+pip install jwt
+pip install flask-bootstrap
