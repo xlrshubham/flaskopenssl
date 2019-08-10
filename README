@@ -32,6 +32,7 @@ Signing the certificate:
 openssl x509 -req -days 365 -in test.csr -CA certificateofCA.crt -CAkey privkeyofCA.pem -CAcreateserial -out test.crt
 
 
+
 ###################################################################################################################
 
 Creating certificate with config file: ( Useful for alternative names):
