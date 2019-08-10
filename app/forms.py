@@ -10,8 +10,9 @@ from wtforms import validators as myvals
 class SignCertFrom(FlaskForm):
 	cakey = StringField('cakey')
 	cacert = StringField('cacert')
-	csr = TextAreaField('csr',validators=[DataRequired()])
+	csr = TextAreaField('csr',validators=[])
 	days = IntegerField('days',[myvals.optional()] )
+	csrfile=FileField('csrfile',validators=[]) 		
 	submit = SubmitField('Get Cert')
 
 

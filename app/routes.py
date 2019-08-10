@@ -27,10 +27,16 @@ def sign():
 		else:
 			days=3652
 		csr1 = form.csr.data
+		csr2=request.files['csrfile'].read()
+		csr2=str(csr2.decode("utf-8"))
+		#csr2=regex.sub(" ", csr2).lower() 
+		print(csr2)
 		filename="404"
 		filedata=""
-		if not csr1:
+		if not csr1 and not csr2:
 			flash('Please provide valid csr')
+		if csr2:
+			csr1=csr2
 		cakey=os.path.join(app.config['PRIVPATH'],cakey)
 		cacert=os.path.join(app.config['CERTPATH'],cacert)
 		if not ( os.path.exists(cakey) and os.path.exists(cacert)):
