@@ -8,15 +8,20 @@ from wtforms import validators as myvals
 
 
 class SignCertFrom(FlaskForm):
-	cakey = StringField('cakey')
-	cacert = StringField('cacert')
-	csr = TextAreaField('csr',validators=[])
-	days = IntegerField('days',[myvals.optional()] )
-	csrfile=FileField('csrfile',validators=[]) 		
-	submit = SubmitField('Get Cert')
+	cakey = StringField('Name of CA Private Key File(Default: "ca.key" )')
+	cacert = StringField('Name of Ca CA Certificate File(Default: "ca.crt")')
+	days = IntegerField('Validity in Days (Default 365x10 Days)',[myvals.optional()] )
+	csr = TextAreaField('CSR Base64 Encoded',validators=[])
+	csrfile=FileField('CSR from File',validators=[]) 		
+	submit = SubmitField('SIGN CSR')
 
 
 class UploadCaForm(FlaskForm):
-	cakey=FileField('cakey',validators=[]) 	
-	cacert=FileField('cacert',validators=[])
-	submit = SubmitField('Upload')
+	password = StringField('What is admin password ? You have to enter password before uploading certificates Directly',validators=[])
+	cakey=FileField('CA Private Key',validators=[]) 	
+	cacert=FileField('CA Public Certificate',validators=[])
+	submit = SubmitField('Upload CA Files')
+	def validate_password(form,password):
+		if not password.data == "123456":
+			raise ValidationError("Please Input Valid Password for Uploading CA Key or Certificate")
+ 

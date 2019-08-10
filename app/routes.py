@@ -83,12 +83,15 @@ def upload():
 	if form.validate_on_submit():
 		cakey = request.files['cakey']
 		cacert=request.files['cacert']
-		cakey.save(os.path.join(app.config['PRIVPATH'],secure_filename(cakey.filename)))
-		flash(os.path.join(app.config['PRIVPATH'],cakey.filename))
-		cacert.save(os.path.join(app.config['CERTPATH'],secure_filename(cacert.filename)))
+		if(cakey):
+			cakey.save(os.path.join(app.config['PRIVPATH'],secure_filename(cakey.filename)))
+			flash(os.path.join(app.config['PRIVPATH'],cakey.filename))
+		if(cacert):
+			cacert.save(os.path.join(app.config['CERTPATH'],secure_filename(cacert.filename)))
 		flash("File has been Uploaded")
 		return redirect(url_for('sign'))
 	return render_template('upload.html',title='Upload CA Key and Cert',form=form)
+
 
 
 @app.route("/download/<file>")

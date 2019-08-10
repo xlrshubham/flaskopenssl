@@ -1,28 +1,52 @@
+{% extends 'bootstrap/base.html' %}
+
 <html>
 	    <head>
+
+	{% block title %}
 		      {% if title %}
 		        <title>{{ title }} - OpenSSL Tool</title>
 		      {% else %}
 		         <title>Open SSL Tool</title>
 		      {% endif %}
+	{% endblock %}
 		</head>
-		<body>
-		      <div>
+
+		
+
+	{% block navbar %}
+		<center>
+		<nav class="navbar navbar-default">
 			      Tool Options:
 			      <a href="{{ url_for('index') }}">Home</a>
 			      <a href="{{ url_for('sign') }}">Sign Cert</a>
-		      </div>
+			      <a href="{{ url_for('upload') }}">Upload CA Certificate</a>
 		      
-		      <hr>
-		      {% with messages = get_flashed_messages() %}
-		      {% if messages %}
-		      <ul>
-			      {% for message in messages %}
-			      <li>{{ message }}</li>
-			      {% endfor %}
-		      </ul>
-		      {% endif %}
-		      {% endwith %}
-		      {% block content %}{% endblock %}
-		</body>
+		</nav>
+		</center>
+	{% endblock %}
+
+	{% block content %}
+		<hr>
+    		<div class="container">
+        		{% with messages = get_flashed_messages() %}
+        		{% if messages %}
+            			{% for message in messages %}
+            			<div class="alert alert-info" role="alert">{{ message }}</div>
+            			{% endfor %}
+        		{% endif %}
+        		{% endwith %}
+
+        		{# application content needs to be provided in the app_content block #}
+    		</div>
+        
+		{% block app_content %}
+	
+		{% endblock %}
+	
+	
+	{% endblock %}
+		      
+	
+
 </html>
