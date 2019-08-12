@@ -115,7 +115,7 @@ def encsym():
 		else:
 			token = f.decrypt(text)
 			token = unicode(token, "utf-8")
-		return render_template('encsym.html',title='Symetric Encryption', form=form, token=token)
+		return render_template('encsym.html',title='Symetric Encryption', form=form, token=token, operation=option)
 	return render_template('encsym.html',title='Symmetric Encryption', form=form)	
 	
 @app.route("/download/<file>")

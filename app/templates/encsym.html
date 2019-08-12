@@ -7,9 +7,16 @@
         <hr>
 	<dl>
   	<dt>Your Output Digest:</dt>
-  		<dd> <pre> {{ token }} </pre> </dd>
+  		<dd style=" border-style: solid; border-width: medium;"> 
+			{% if not operation=='enc' %}
+			<pre> 
+			{% endif %}
+				{{ token }} 
+			</pre> 
+		</dd>
+		
 	</dl>
-    	<hr>
+	</hr>
      {% endif %} 
 
 	{% block app_content %}

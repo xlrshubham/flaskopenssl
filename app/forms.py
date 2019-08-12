@@ -30,5 +30,5 @@ class EncryptSymmetric(FlaskForm):
 	password=PasswordField('password')
 	salt=StringField('Salt (Optional)')
 	option=SelectField('Select Operation', choices=[('enc', 'Encryption'), ('dec', 'Decryption')]  )
-	submit = SubmitField('Upload CA Files')
+	submit = SubmitField('Perform Operation')
 	
