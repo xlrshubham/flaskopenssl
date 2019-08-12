@@ -5,10 +5,15 @@ from werkzeug.urls import url_parse
 from werkzeug import secure_filename
 from datetime import datetime
 import datetime as datetime1
-from app.forms import SignCertFrom, UploadCaForm
+from app.forms import SignCertFrom, UploadCaForm, EncryptSymmetric
 from OpenSSL import crypto
 from cryptography.hazmat.primitives import hashes
 import os
+import base64
+from cryptography.fernet import Fernet
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 @app.route('/')
 @app.route('/index')
@@ -92,8 +97,27 @@ def upload():
 		return redirect(url_for('sign'))
 	return render_template('upload.html',title='Upload CA Key and Cert',form=form)
 
-
-
+@app.route('/encsym',methods=['GET','POST'])
+def encsym():
+	form=EncryptSymmetric()
+	if form.validate_on_submit():
+		text=form.text.data.encode('utf-8')
+		password=form.password.data.encode('utf-8')
+		salt=form.salt.data.encode('utf-8')
+		option=form.option.data
+		if not salt:
+			salt="****__SECRET___***".encode()
+		kdf = PBKDF2HMAC(algorithm=hashes.SHA256(), length=32, salt=salt, iterations=100000, backend=default_backend() )
+		key = base64.urlsafe_b64encode(kdf.derive(password))
+		f = Fernet(key)
+		if option == 'enc':
+			token = f.encrypt(text)
+		else:
+			token = f.decrypt(text)
+			token = unicode(token, "utf-8")
+		return render_template('encsym.html',title='Symetric Encryption', form=form, token=token)
+	return render_template('encsym.html',title='Symmetric Encryption', form=form)	
+	
 @app.route("/download/<file>")
 def download(file = None):
 	if file is None:

@@ -5,9 +5,9 @@
 
 	{% block title %}
 		      {% if title %}
-		        <title>{{ title }} - OpenSSL Tool</title>
+		        {{ title }} - OpenSSL Tool
 		      {% else %}
-		         <title>Open SSL Tool</title>
+		         Open SSL Tool
 		      {% endif %}
 	{% endblock %}
 		</head>
@@ -17,10 +17,12 @@
 	{% block navbar %}
 		<center>
 		<nav class="navbar navbar-default">
-			      Tool Options:
-			      <a href="{{ url_for('index') }}">Home</a>
-			      <a href="{{ url_for('sign') }}">Sign Cert</a>
-			      <a href="{{ url_for('upload') }}">Upload CA Certificate</a>
+			      
+			      <a href="{{ url_for('index') }}">Home</a> &nbsp; | &nbsp;  
+			      <a href="{{ url_for('sign') }}">Sign Cert</a> &nbsp; | &nbsp;
+			      <a href="{{ url_for('upload') }}">Upload Keys</a> &nbsp; | &nbsp;
+			      <a href="{{ url_for('encsym') }}">Symmetric Encryption</a> 
+				
 		      
 		</nav>
 		</center>

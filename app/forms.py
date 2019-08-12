@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, FileField, IntegerField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, FileField, IntegerField, SelectField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from wtforms import StringField, TextAreaField, SubmitField
 from wtforms.validators import DataRequired, Length
@@ -17,11 +17,18 @@ class SignCertFrom(FlaskForm):
 
 
 class UploadCaForm(FlaskForm):
-	password = StringField('What is admin password ? You have to enter password before uploading certificates Directly',validators=[])
+	password = StringField('Admin Password',validators=[])
 	cakey=FileField('CA Private Key',validators=[]) 	
 	cacert=FileField('CA Public Certificate',validators=[])
 	submit = SubmitField('Upload CA Files')
 	def validate_password(form,password):
 		if not password.data == "123456":
 			raise ValidationError("Please Input Valid Password for Uploading CA Key or Certificate")
- 
+
+class EncryptSymmetric(FlaskForm):
+	text=TextAreaField('Text')
+	password=PasswordField('password')
+	salt=StringField('Salt (Optional)')
+	option=SelectField('Select Operation', choices=[('enc', 'Encryption'), ('dec', 'Decryption')]  )
+	submit = SubmitField('Upload CA Files')
+	

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block content %}
+    <center>
+    {% if token %}
+        <hr>
+	<dl>
+  	<dt>Your Output Digest:</dt>
+  		<dd> <pre> {{ token }} </pre> </dd>
+	</dl>
+    	<hr>
+     {% endif %} 
+
+	{% block app_content %}
+    <h1>Encrypt Decrypt Message</h1>
+    <div class="row">
+        <div class="col-md-4 col-lg-offset-4">
+            {{ wtf.quick_form(form) }}
+        </div>
+    </div>
+	{% endblock %}
+
+{% endblock %}
+
+## Delete above line for full form
+
