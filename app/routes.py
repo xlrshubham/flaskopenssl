@@ -113,7 +113,11 @@ def encsym():
 		if option == 'enc':
 			token = f.encrypt(text)
 		else:
-			token = f.decrypt(text)
+			try:
+				token = f.decrypt(text)
+			except Exception  as e:
+				flash("Either Password or Salt is wrong !!! Decryption Not Possible")
+				return redirect(url_for('encsym'))
 			token = unicode(token, "utf-8")
 		return render_template('encsym.html',title='Symetric Encryption', form=form, token=token, operation=option)
 	return render_template('encsym.html',title='Symmetric Encryption', form=form)	

@@ -1,8 +1,5 @@
 {% extends 'bootstrap/base.html' %}
 
-<html>
-	    <head>
-
 	{% block title %}
 		      {% if title %}
 		        {{ title }} - OpenSSL Tool
@@ -10,8 +7,6 @@
 		         Open SSL Tool
 		      {% endif %}
 	{% endblock %}
-		</head>
-
 		
 
 	{% block navbar %}
@@ -28,27 +23,18 @@
 		</center>
 	{% endblock %}
 
-	{% block content %}
-		<hr>
-    		<div class="container">
-        		{% with messages = get_flashed_messages() %}
-        		{% if messages %}
-            			{% for message in messages %}
-            			<div class="alert alert-info" role="alert">{{ message }}</div>
-            			{% endfor %}
-        		{% endif %}
-        		{% endwith %}
 
-        		{# application content needs to be provided in the app_content block #}
-    		</div>
-        
-		{% block app_content %}
-	
-		{% endblock %}
-	
-	
-	{% endblock %}
-		      
-	
+{% block content %}
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-info" role="alert">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
 
-</html>
+        {# application content needs to be provided in the app_content block #}
+        {% block app_content %}{% endblock %}
+    </div>
+{% endblock %}
