@@ -5,18 +5,16 @@
     <center>
     {% if token %}
         <hr>
-	<dl>
-  	<dt>Your Output Digest:</dt>
-  		<dd style=" border-style: solid; border-width: medium;"> 
+	Your Output Digest: <hr/>
+  		 
 			{% if not operation=='enc' %}
 			<pre> 
 			{% endif %}
 				{{ token }} 
 			</pre> 
-		</dd>
 		
-	</dl>
-	</hr>
+		
+	<hr>
      {% endif %} 
 
     <h1>Encrypt Decrypt Message</h1>
