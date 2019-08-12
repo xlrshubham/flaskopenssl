@@ -6,12 +6,12 @@
     {% if token %}
         <hr>
 	Your Output Digest: <hr/>
-  		 
-			{% if not operation=='enc' %}
-			<pre> 
-			{% endif %}
+  		 	
+			{% if not  operation=='enc' %}
+			<pre> {{ token }} </pre>
+			{% else %}
 				{{ token }} 
-			</pre> 
+			{% endif %}
 		
 		
 	<hr>
