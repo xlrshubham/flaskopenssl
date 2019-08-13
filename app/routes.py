@@ -5,15 +5,17 @@ from werkzeug.urls import url_parse
 from werkzeug import secure_filename
 from datetime import datetime
 import datetime as datetime1
-from app.forms import SignCertFrom, UploadCaForm, EncryptSymmetric
+from app.forms import SignCertFrom, UploadCaForm, EncryptSymmetric , KeyGenerator
 from OpenSSL import crypto
 from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives import serialization
 import os
 import base64
 from cryptography.fernet import Fernet
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+from cryptography.hazmat.primitives.asymmetric import rsa, dsa
 
 @app.route('/')
 @app.route('/index')
@@ -96,6 +98,53 @@ def upload():
 		flash("File has been Uploaded")
 		return redirect(url_for('sign'))
 	return render_template('upload.html',title='Upload CA Key and Cert',form=form)
+
+@app.route('/keygen',methods=['GET','POST'])
+def keygen():
+	form=KeyGenerator()
+	if form.validate_on_submit():
+		algo=form.algo.data
+		keylength=int(form.keylength.data)
+		filepath1=os.path.join(app.config['CERTPATH'], secure_filename("private-"+str(datetime.now().strftime("%y%B%d%H%M%S")+".PME")))
+		filepath2=os.path.join(app.config['CERTPATH'], secure_filename("private-"+str(datetime.now().strftime("%y%B%d%H%M%S")+"_PKCS8.PME")))
+		filename1=secure_filename("private-"+str(datetime.now().strftime("%y%B%d%H%M%S")+".PME"))
+		filename2=secure_filename("private-"+str(datetime.now().strftime("%y%B%d%H%M%S")+"_PKCS8.PME"))
+		if algo=='rsa':
+			private_key = rsa.generate_private_key(public_exponent=65537,key_size=keylength,backend=default_backend())
+			priv_text=private_key.private_bytes(encoding=serialization.Encoding.PEM, format=serialization.PrivateFormat.TraditionalOpenSSL,encryption_algorithm=serialization.NoEncryption())
+			priv_text2=private_key.private_bytes(encoding=serialization.Encoding.PEM, format=serialization.PrivateFormat.PKCS8,encryption_algorithm=serialization.NoEncryption())
+		if algo=='dsa':
+			private_key = dsa.generate_private_key(key_size=keylength,backend=default_backend())
+			priv_text=private_key.private_bytes(encoding=serialization.Encoding.PEM, format=serialization.PrivateFormat.TraditionalOpenSSL,encryption_algorithm=serialization.NoEncryption())
+			priv_text2=private_key.private_bytes(encoding=serialization.Encoding.PEM, format=serialization.PrivateFormat.PKCS8,encryption_algorithm=serialization.NoEncryption())
+		if not private_key:
+			flash("Some error occured. Please notify System Admin. ")
+			return render_template('keygen.html',title='Key Generator', form=form)	
+			
+		pub_text=private_key.public_key().public_bytes(encoding=serialization.Encoding.PEM,format=serialization.PublicFormat.SubjectPublicKeyInfo)
+		pubssh_text=private_key.public_key().public_bytes(encoding=serialization.Encoding.OpenSSH,format=serialization.PublicFormat.OpenSSH)
+		form.priv.data=priv_text
+		if priv_text2:
+			form.priv2.data=priv_text2
+		form.pub.data=pub_text
+		form.pubssh.data=pubssh_text
+		flash("Keys Created")
+		completefile=priv_text2 + priv_text + pub_text + pubssh_text
+		#form.priv.data=completefile
+		f = open(filepath1, "a")
+		f.write(priv_text)
+		f.close()
+		f = open(filepath2, "a")
+		f.write(priv_text2)
+		f.close()
+		
+		files=[url_for('download',file=filename1) , url_for('download',file=filename2)] 
+		return render_template('keygen.html',title='Key Generator', form=form, keys=1, files=files)
+	else:
+		pass
+		#flash("Validation incomplete")
+	return render_template('keygen.html',title='Key Generator', form=form)	
+
 
 @app.route('/encsym',methods=['GET','POST'])
 def encsym():

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% from "_formrender.html" import render_field %}
+
+
+{% block app_content %}
+    <center>
+	<hr>
+	{% if files %}
+		<a href= {{ files[0] }} >Download Private Key</a> &nbsp; &nbsp; | &nbsp; &nbsp;
+		<a href= {{ files[1] }} >Download Private Key in RSA Format<a> 
+	{% endif %}
+	<hr>
+
+    <form method="post" >
+    <h1>Generate New Keys</h1>
+    <div class="row">
+        <div class="">
+	<dl>
+		{% if keys %}
+		{{ render_field(form.priv) }}
+		{{ render_field(form.priv2) }}
+		
+		{{ render_field(form.pub) }}
+		
+		{{ render_field(form.pubssh) }}
+		
+		{% else %}
+		{{ form.hidden_tag() }}
+       		{{ render_field(form.algo) }}
+        	{{ render_field(form.keylength) }}
+		{{ render_field(form.submit) }}
+		{% endif %}
+		
+		
+
+	</dl>
+	</div>
+    </div>
+    </form>
+
+{% endblock %}
+
+## Delete above line for full form
+
