@@ -2,7 +2,8 @@ from flask import render_template, flash, redirect, url_for, request, send_file
 from app import app
 from flask import request
 from werkzeug.urls import url_parse
-from werkzeug import secure_filename
+#from werkzeug import secure_filename
+from werkzeug.utils import secure_filename
 from datetime import datetime
 import datetime as datetime1
 from app.forms import SignCertFrom, UploadCaForm, EncryptSymmetric , KeyGenerator
@@ -53,8 +54,9 @@ def sign():
 			csr1=csr2
 		cakey=os.path.join(app.config['PRIVPATH'],cakey)
 		cacert=os.path.join(app.config['CERTPATH'],cacert)
-		if not ( os.path.exists(cakey) and os.path.exists(cacert)):
-			return # Handle error here
+		if not ( os.path.exists(cakey) and os.path.exists(cacert)): 
+			flash("Please Store valid base 64 key and cert in folder ." + cakey + '  ' + cacert)
+			return render_template('sign.html', title='Sign a certificate', form=form)
 		try:
 			counter_f=open(app.config['COUNTER'],'a+')
 			counter_f.seek(0)
@@ -146,7 +148,7 @@ def keygen():
 		f.write(priv_text.decode())
 		f.close()
 		f = open(filepath2, "a")
-		f.write(priv_text2)
+		f.write(priv_text2.decode())
 		f.close()
 	
 	

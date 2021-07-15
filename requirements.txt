@@ -1,0 +1,6 @@
+flask
+python-dotenv
+flask_wtf
+jwt
+flask-bootstrap
+pyOpenSSL
