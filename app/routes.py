@@ -16,6 +16,13 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives.asymmetric import rsa, dsa
+from flask import jsonify
+import sys
+
+
+@app.route("/ip", methods=["GET"])
+def ip():
+    return jsonify({'ip': request.remote_addr}), 200
 
 @app.route('/')
 @app.route('/index')
@@ -50,6 +57,7 @@ def sign():
 			return # Handle error here
 		try:
 			counter_f=open(app.config['COUNTER'],'a+')
+			counter_f.seek(0)
 			counter=int(len(counter_f.read()))
 			counter_f.write('1')
 			counter_f.close()
@@ -74,13 +82,16 @@ def sign():
 			filedata=e
 			filename='client'+str(counter)+'.crt'
 			f=open(os.path.join(app.config['CERTPATH'],filename),'a')
-			f.write(e)
+			f.write(e.decode())
 			f.close()
 #			cert.sign(cakey, hashes.SHA256())
 #			with open("output.crt","wb") as f:
 #				f.write(cert.public_bytes(serialization.Encoding.PEM))
 		except Exception as e:
-			flash("Please Store valid base 64 key and cert in folder  " +  cacert  +"   " +  cakey)
+			exc_type, exc_obj, exc_tb = sys.exc_info()
+			fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+			print(exc_type, fname, exc_tb.tb_lineno)
+			flash("Please Store valid base 64 key and cert in folder  " +  cacert  +"   " +  cakey + "  :  " +str(exc_type, fname, exc_tb.tb_lineno, e))
 		return render_template('sign.html', title='Sign a certificate', form=form, file=url_for('download',file=filename))
 	return render_template('sign.html', title='Sign a certificate', form=form)
 
@@ -132,12 +143,13 @@ def keygen():
 		completefile=priv_text2 + priv_text + pub_text + pubssh_text
 		#form.priv.data=completefile
 		f = open(filepath1, "a")
-		f.write(priv_text)
+		f.write(priv_text.decode())
 		f.close()
 		f = open(filepath2, "a")
 		f.write(priv_text2)
 		f.close()
-		
+	
+	
 		files=[url_for('download',file=filename1) , url_for('download',file=filename2)] 
 		return render_template('keygen.html',title='Key Generator', form=form, keys=1, files=files)
 	else:
